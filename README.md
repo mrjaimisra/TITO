@@ -1,5 +1,5 @@
 # TITO
-TITO is an acronym, which stands for...
+T.I.T.O. is an acronym, which stands for...
 
 T.he purpose of this thing
 I.s to give me a way of vizualizing
