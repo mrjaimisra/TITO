@@ -1,3 +1,4 @@
+require 'spec_helper'
 require './git_pull_file_writer'
 require 'tempfile'
 
