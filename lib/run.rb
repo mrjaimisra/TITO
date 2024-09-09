@@ -18,7 +18,6 @@ else
     exit
   end
   output = File.read(file.path)
-  require 'pry'; binding.pry
 end
 file.close
 puts output
