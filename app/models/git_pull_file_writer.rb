@@ -1,12 +1,18 @@
 class GitPullFileWriter
-  attr_reader :file_class
+  attr_reader :file_class, :path_to_project, :pull_directory
 
-  def initialize(file_class: File)
+  def initialize(file_class: File, path_to_project: ".")
     @file_class = file_class
+    @path_to_project = path_to_project
   end
 
   def pull
-    output = `git pull`
+    output = ""
+
+    Dir.chdir(path_to_project) do
+      @pull_directory = Dir.pwd
+      output = `git pull`
+    end
 
     write_to_file(output)
   end
