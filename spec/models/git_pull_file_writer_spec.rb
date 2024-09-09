@@ -1,5 +1,5 @@
 require 'spec_helper'
-require './git_pull_file_writer'
+require './app/models/git_pull_file_writer'
 require 'tempfile'
 
 RSpec.describe GitPullFileWriter do

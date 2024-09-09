@@ -1,5 +1,5 @@
 require 'spec_helper'
-require './git_pull_parser'
+require './app/models/git_pull_parser'
 
 RSpec.describe GitPullParser do
   it "parses git pull output from a file and can determine that files have changed" do
