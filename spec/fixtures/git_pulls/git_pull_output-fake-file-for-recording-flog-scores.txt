@@ -1,4 +1,4 @@
 Updating 41764c2..358f121
 Fast-forward
- spec/fixtures/for_recording_total_flog_score.rb | 12 ++++--------
+ spec/fixtures/for_recording_flog_scores.rb | 12 ++++--------
  1 file changed, 4 insertions(+), 8 deletions(-)
