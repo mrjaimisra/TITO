@@ -1,22 +1,11 @@
 require './app/models/changed_file'
 
 class GitPullParser
-  attr_reader :changed_files, :additions, :deletions
+  attr_reader :changed_files, :additions, :deletions, :output_file_path
 
-  def parse(output)
-    @additions = 0
-    @deletions = 0
-    lines = lines_representing_changed_files(output)
-
-    @changed_files = lines.map do |line|
-      data_for_each_changed_file(line)
-    end
-
-    changed_files
-  end
-
-  def parse_from_file(file_path)
-    output = File.read(file_path)
+  def parse_from_file(output_file_path)
+    @output_file_path = output_file_path
+    output = File.read(output_file_path)
 
     parse(output)
   end
@@ -33,6 +22,18 @@ class GitPullParser
 
   private
 
+  def parse(output)
+    @additions = 0
+    @deletions = 0
+    lines = lines_representing_changed_files(output)
+
+    @changed_files = lines.map do |line|
+      data_for_each_changed_file(line)
+    end
+
+    changed_files
+  end
+
   def data_for_each_changed_file(line)
     parse_additions_and_deletions(line)
     number_of_changes = number_of_line_changes_in_output(line)
@@ -41,6 +42,8 @@ class GitPullParser
     flog_lines = run_flog_and_parse_output(file_path)
     total_flog_score = get_total_flog_score(flog_lines)
     average_flog_score_per_method = run_flog_and_get_average_flog_score_per_method(flog_lines)
+    file_name = File.basename(file_path)
+    created_and_updated_at = parse_timestamp_from_output_file_path
 
     ChangedFile.new(
       additions: additions,
@@ -50,7 +53,9 @@ class GitPullParser
       total_flog_score: total_flog_score,
       average_flog_score_per_method: average_flog_score_per_method,
       file_path: file_path,
-      file_name: File.basename(file_path),
+      file_name: file_name,
+      created_at: created_and_updated_at,
+      updated_at: created_and_updated_at,
     )
   end
 
@@ -110,5 +115,15 @@ class GitPullParser
 
   def get_flog_value_from_line(flog_line)
     flog_line.first.split(":").first.to_f
+  end
+
+  def parse_timestamp_from_output_file_path
+    timestamp_integer = File.basename(output_file_path).split(".").first.split("-").last.to_i
+
+    if timestamp_integer.zero?
+      Time.now
+    else
+      Time.at(timestamp_integer)
+    end
   end
 end

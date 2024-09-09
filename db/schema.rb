@@ -23,5 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_09_064442) do
     t.integer "total_line_length"
     t.decimal "total_flog_score"
     t.decimal "average_flog_score_per_method"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end

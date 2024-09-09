@@ -9,6 +9,7 @@ class CreateChangedFilesTable < ActiveRecord::Migration[7.2]
       t.integer :total_line_length
       t.decimal :total_flog_score
       t.decimal :average_flog_score_per_method
+      t.timestamps
     end
   end
 end
