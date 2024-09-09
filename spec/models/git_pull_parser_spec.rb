@@ -41,4 +41,16 @@ RSpec.describe GitPullParser do
     expect(changed_file.additions).to eq(4)
     expect(changed_file.deletions).to eq(8)
   end
+
+  it "ensures the number of line changes in the output matches its total number of plus and minus signs" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-1725857145.txt")
+
+    git_pull_parser.parse(output)
+    changed_file = git_pull_parser.changed_files.first
+    number_of_plus_and_minus_signs = changed_file.additions + changed_file.deletions
+    number_of_lines_changed_from_output = changed_file.number_of_changes
+
+    expect(number_of_lines_changed_from_output).to eq(number_of_plus_and_minus_signs)
+  end
 end
