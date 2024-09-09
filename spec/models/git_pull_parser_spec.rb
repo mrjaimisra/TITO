@@ -30,4 +30,15 @@ RSpec.describe GitPullParser do
 
     expect(lines_of_code_deleted_from_first_changed_file).to eq(5)
   end
+
+  it "determines additions and deletions when both exist for the same file" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-1725857145.txt")
+
+    git_pull_parser.parse(output)
+    changed_file = git_pull_parser.changed_files.first
+
+    expect(changed_file.additions).to eq(4)
+    expect(changed_file.deletions).to eq(8)
+  end
 end
