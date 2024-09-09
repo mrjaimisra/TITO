@@ -103,4 +103,14 @@ RSpec.describe GitPullParser do
 
     expect(changed_file.file_name).to eq("git_pull_parser.rb")
   end
+
+  it "saves changed file events to the database for each file that has changed" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-for-saving-changed-file-records-to-database.txt")
+
+    git_pull_parser.parse(output)
+    git_pull_parser.save_changed_files!
+
+    expect(ChangedFile.count).to eq(5)
+  end
 end

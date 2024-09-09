@@ -1,16 +1,7 @@
+require './app/models/changed_file'
+
 class GitPullParser
   attr_reader :changed_files, :additions, :deletions
-
-  ChangedFile = Struct.new(
-    :file_path,
-    :file_name,
-    :additions,
-    :deletions,
-    :number_of_changes,
-    :total_line_length,
-    :total_flog_score,
-    :average_flog_score_per_method,
-  )
 
   def parse(output)
     @additions = 0
@@ -26,6 +17,12 @@ class GitPullParser
 
   def files_changed?
     @changed_files.length > 0
+  end
+
+  def save_changed_files!
+    changed_files.each do |changed_file|
+      changed_file.save!
+    end
   end
 
   private

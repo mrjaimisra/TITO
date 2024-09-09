@@ -9,3 +9,7 @@ gem 'rake', '~> 13.2', '>= 13.2.1'
 gem 'rack-test', '~> 2.1'
 gem 'rspec', '~> 3.13'
 gem 'pry', '~> 0.14.2'
+
+group :test do
+  gem 'database_cleaner-active_record', '~> 2.2'
+end
