@@ -17,11 +17,16 @@ else
     puts "Already up to date."
     exit
   end
-  output = File.read(file.path)
 end
-file.close
-puts output
+puts "GitPullFileWriter output: #{output}"
+
 parser = GitPullParser.new
-parser.parse(output)
+parser.parse_from_file(file.path)
+file.close
+
 puts "\n\nCreating #{parser.changed_files.length} records in the database...\n\n"
-parser.save_changed_files!
+if parser.save_changed_files!
+  puts "Records created successfully."
+else
+  puts "There was an error saving the records: #{parser.errors.full_messages.join(", ")}."
+end
