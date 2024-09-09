@@ -17,7 +17,7 @@ else
     puts "Already up to date."
     exit
   end
-  output = File.read(file.path).read
+  output = File.read(file.path)
   require 'pry'; binding.pry
 end
 file.close
