@@ -1,5 +1,7 @@
 require './app/models/git_pull_file_writer.rb'
 require './app/models/git_pull_parser.rb'
+require './app/models/changed_file.rb'
+require 'sinatra/activerecord'
 
 puts "Pulling from git and writing the output to a file...\n\n"
 file = GitPullFileWriter.new(path_to_project: ARGV[0]).pull
