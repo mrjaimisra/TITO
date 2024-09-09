@@ -18,9 +18,11 @@ class GitPullParser
     @changed_files = lines.map do |line|
       parse_additions_and_deletions(line)
       number_of_changes = number_of_line_changes_in_output(line)
-      total_line_length = total_line_length_for_file(line)
-      total_flog_score = run_flog_and_get_total_flog_score(line)
-      average_flog_score_per_method = run_flog_and_get_average_flog_score_per_method(line)
+      file_path = file_path_for_changed_file(line)
+      total_line_length = total_line_length_for_file(file_path)
+      flog_lines = run_flog_and_parse_output(file_path)
+      total_flog_score = get_total_flog_score(flog_lines)
+      average_flog_score_per_method = run_flog_and_get_average_flog_score_per_method(flog_lines)
 
       ChangedFile.new(
         additions: additions,
@@ -60,35 +62,42 @@ class GitPullParser
     line.split("|").last.split(" ").first.to_i
   end
 
-  def total_line_length_for_file(line)
-    file_path = line.split("|").first.strip
+  def total_line_length_for_file(file_path)
     total_lines = File.readlines(file_path)
     total_lines.length
   end
 
-  def run_flog_and_get_total_flog_score(line)
-    file_path = line.split("|").first.strip
-    file_extension = File.extname(file_path)
+  def get_total_flog_score(flog_lines)
+    return if flog_lines.nil?
 
-    return unless file_extension == ".rb"
-
-    flog_output = `flog #{file_path}`
-    flog_lines = flog_output.split("\n").map{|flog_line| flog_line.strip}
     flog_total_line = flog_lines.select{|flog_line| flog_line.include?("flog total")}
 
-    flog_total_line.first.split(":").first.to_f
+    get_flog_value_from_line(flog_total_line)
   end
 
-  def run_flog_and_get_average_flog_score_per_method(line)
-    file_path = line.split("|").first.strip
+  def run_flog_and_get_average_flog_score_per_method(flog_lines)
+    return if flog_lines.nil?
+
+    flog_average_line = flog_lines.select{|flog_line| flog_line.include?("flog/method average")}
+
+    get_flog_value_from_line(flog_average_line)
+  end
+
+  def file_path_for_changed_file(line)
+    line.split("|").first.strip
+  end
+
+  def run_flog_and_parse_output(file_path)
     file_extension = File.extname(file_path)
 
     return unless file_extension == ".rb"
 
     flog_output = `flog #{file_path}`
-    flog_lines = flog_output.split("\n").map{|flog_line| flog_line.strip}
-    flog_average_line = flog_lines.select{|flog_line| flog_line.include?("flog/method average")}
 
-    flog_average_line.first.split(":").first.to_f
+    flog_output.split("\n").map{|flog_line| flog_line.strip}
+  end
+
+  def get_flog_value_from_line(flog_line)
+    flog_line.first.split(":").first.to_f
   end
 end
