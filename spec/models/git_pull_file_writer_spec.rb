@@ -40,4 +40,14 @@ RSpec.describe GitPullFileWriter do
 
     expect(git_pull_file_writer.pull_directory).to eq(File.expand_path("./spec"))
   end
+
+  it "doesn't save a file if the output of git pull is \"Already up to date.\"" do
+    git_pull_file_writer = GitPullFileWriter.new
+    allow(git_pull_file_writer).to receive(:`).and_call_original
+    allow(git_pull_file_writer).to receive(:`).with("git pull").and_return("Already up to date.")
+
+    file = git_pull_file_writer.pull
+
+    expect(file).to be_nil
+  end
 end

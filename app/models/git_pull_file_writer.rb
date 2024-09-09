@@ -18,8 +18,10 @@ class GitPullFileWriter
   end
 
   def write_to_file(output)
+    return if output.downcase.include?("Already up to date.".downcase)
+
     file_name = "git_pulls/git_pull_output-#{Time.now.to_i}.txt"
-    output_file = file_class.new(file_name, "w")
+    output_file = file_class.new(file_name, "w+")
 
     output_file.write(output)
 
