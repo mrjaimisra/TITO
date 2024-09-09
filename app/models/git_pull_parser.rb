@@ -15,6 +15,12 @@ class GitPullParser
     changed_files
   end
 
+  def parse_from_file(file_path)
+    output = File.read(file_path)
+
+    parse(output)
+  end
+
   def files_changed?
     @changed_files.length > 0
   end

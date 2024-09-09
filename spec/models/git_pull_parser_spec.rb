@@ -113,4 +113,16 @@ RSpec.describe GitPullParser do
 
     expect(ChangedFile.count).to eq(5)
   end
+
+  it "parses output from a file path" do
+    git_pull_parser = GitPullParser.new
+    file_path = "spec/fixtures/git_pulls/git_pull_output-1725876701.txt"
+
+    output = git_pull_parser.parse_from_file(file_path)
+
+    expect(git_pull_parser.files_changed?).to be true
+    expect(git_pull_parser.changed_files.count).to eq(3)
+    expect(git_pull_parser.changed_files.first.additions).to eq(3)
+    expect(git_pull_parser.changed_files.first.deletions).to eq(1)
+  end
 end
