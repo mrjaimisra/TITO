@@ -5,8 +5,6 @@ require './app/models/changed_file.rb'
 # app.rb
 require "sinatra/activerecord"
 
-set :database_file, "./config/database.yml"
-
 puts "Pulling from git and writing the output to a file...\n\n"
 file = GitPullFileWriter.new(path_to_project: ARGV[0]).pull
 if !file
