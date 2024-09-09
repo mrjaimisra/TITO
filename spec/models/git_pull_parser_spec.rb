@@ -20,4 +20,14 @@ RSpec.describe GitPullParser do
 
     expect(lines_of_code_added_to_first_changed_file).to eq(2)
   end
+
+  it "determines how many lines of code have been deleted from changed files" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-1725856246.txt")
+
+    git_pull_parser.parse(output)
+    lines_of_code_deleted_from_first_changed_file = git_pull_parser.changed_files.first.deletions
+
+    expect(lines_of_code_deleted_from_first_changed_file).to eq(5)
+  end
 end
