@@ -5,7 +5,7 @@ require 'tempfile'
 RSpec.describe GitPullFileWriter do
   it "runs git pull and writes the output to a file" do
     git_pull_file_writer = GitPullFileWriter.new(file_class: StringIO)
-    git_pull_example_output = File.read("spec/fixtures/git_pulls/git_pull-1725121785.txt")
+    git_pull_example_output = File.read("spec/fixtures/git_pulls/git_pull-output-1725121785.txt")
     allow(git_pull_file_writer).to receive(:`).with("git pull").and_return(git_pull_example_output)
 
     file = git_pull_file_writer.pull
