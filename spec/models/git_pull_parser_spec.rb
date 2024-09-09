@@ -63,4 +63,14 @@ RSpec.describe GitPullParser do
 
     expect(changed_file.total_line_length).to eq(14)
   end
+
+  it "records the total flog score for a changed file if the file has the extension .rb" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-fake-file-for-recording-total-flog-score.txt")
+
+    git_pull_parser.parse(output)
+    changed_file = git_pull_parser.changed_files.first
+
+    expect(changed_file.total_flog_score).to eq(21.7)
+  end
 end
