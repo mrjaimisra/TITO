@@ -53,4 +53,14 @@ RSpec.describe GitPullParser do
 
     expect(number_of_lines_changed_from_output).to eq(number_of_plus_and_minus_signs)
   end
+
+  it "counts the total line length a changed file" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-fake-file-for-counting-total-line-length.txt")
+
+    git_pull_parser.parse(output)
+    changed_file = git_pull_parser.changed_files.first
+
+    expect(changed_file.total_line_length).to eq(14)
+  end
 end

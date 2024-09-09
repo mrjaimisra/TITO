@@ -1,7 +1,7 @@
 class GitPullParser
   attr_reader :changed_files, :additions, :deletions
 
-  ChangedFile = Struct.new(:additions, :deletions, :number_of_changes)
+  ChangedFile = Struct.new(:additions, :deletions, :number_of_changes, :total_line_length)
   def parse(output)
     @additions = 0
     @deletions = 0
@@ -10,8 +10,14 @@ class GitPullParser
     @changed_files = lines.map do |line|
       parse_additions_and_deletions(line)
       number_of_changes = number_of_line_changes_in_output(line)
+      total_line_length = total_line_length_for_file(line)
 
-      ChangedFile.new(additions: additions, deletions: deletions, number_of_changes: number_of_changes)
+      ChangedFile.new(
+        additions: additions,
+        deletions: deletions,
+        number_of_changes: number_of_changes,
+        total_line_length: total_line_length,
+      )
     end
 
     changed_files
@@ -40,5 +46,11 @@ class GitPullParser
 
   def number_of_line_changes_in_output(line)
     line.split("|").last.split(" ").first.to_i
+  end
+
+  def total_line_length_for_file(line)
+    file_path = line.split("|").first.strip
+    total_lines = File.readlines(file_path)
+    total_lines.length
   end
 end
