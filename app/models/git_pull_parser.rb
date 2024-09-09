@@ -2,6 +2,8 @@ class GitPullParser
   attr_reader :changed_files, :additions, :deletions
 
   ChangedFile = Struct.new(
+    :file_path,
+    :file_name,
     :additions,
     :deletions,
     :number_of_changes,
@@ -16,22 +18,7 @@ class GitPullParser
     lines = lines_representing_changed_files(output)
 
     @changed_files = lines.map do |line|
-      parse_additions_and_deletions(line)
-      number_of_changes = number_of_line_changes_in_output(line)
-      file_path = file_path_for_changed_file(line)
-      total_line_length = total_line_length_for_file(file_path)
-      flog_lines = run_flog_and_parse_output(file_path)
-      total_flog_score = get_total_flog_score(flog_lines)
-      average_flog_score_per_method = run_flog_and_get_average_flog_score_per_method(flog_lines)
-
-      ChangedFile.new(
-        additions: additions,
-        deletions: deletions,
-        number_of_changes: number_of_changes,
-        total_line_length: total_line_length,
-        total_flog_score: total_flog_score,
-        average_flog_score_per_method: average_flog_score_per_method,
-      )
+      data_for_each_changed_file(line)
     end
 
     changed_files
@@ -42,6 +29,27 @@ class GitPullParser
   end
 
   private
+
+  def data_for_each_changed_file(line)
+    parse_additions_and_deletions(line)
+    number_of_changes = number_of_line_changes_in_output(line)
+    file_path = file_path_for_changed_file(line)
+    total_line_length = total_line_length_for_file(file_path)
+    flog_lines = run_flog_and_parse_output(file_path)
+    total_flog_score = get_total_flog_score(flog_lines)
+    average_flog_score_per_method = run_flog_and_get_average_flog_score_per_method(flog_lines)
+
+    ChangedFile.new(
+      additions: additions,
+      deletions: deletions,
+      number_of_changes: number_of_changes,
+      total_line_length: total_line_length,
+      total_flog_score: total_flog_score,
+      average_flog_score_per_method: average_flog_score_per_method,
+      file_path: file_path,
+      file_name: File.basename(file_path),
+    )
+  end
 
   def lines_representing_changed_files(output)
     output.split(/\n/).filter_map { |line| line if line.include?("|") }

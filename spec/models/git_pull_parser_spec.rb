@@ -83,4 +83,24 @@ RSpec.describe GitPullParser do
 
     expect(changed_file.average_flog_score_per_method).to eq(4.3)
   end
+
+  it "parses the file path for a changed file" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-1725857145.txt")
+
+    git_pull_parser.parse(output)
+    changed_file = git_pull_parser.changed_files.first
+
+    expect(changed_file.file_path).to eq("app/models/git_pull_parser.rb")
+  end
+
+  it "parses the file name for a changed file" do
+    git_pull_parser = GitPullParser.new
+    output = File.read("spec/fixtures/git_pulls/git_pull_output-1725857145.txt")
+
+    git_pull_parser.parse(output)
+    changed_file = git_pull_parser.changed_files.first
+
+    expect(changed_file.file_name).to eq("git_pull_parser.rb")
+  end
 end

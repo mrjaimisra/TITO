@@ -1,0 +1,8 @@
+Updating 41764c2..358f121
+Fast-forward
+ app/models/git_pull_parser.rb | 12 ++++--------
+ app/models/git_pull_file_writer.rb | 1 +
+ spec/fixtures/file_to_be_deleted_2.rb | 5 -----
+ spec/fixtures/for_counting_total_line_length.rb | 12 ++++--------
+ spec/fixtures/for_recording_flog_scores.rb | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
