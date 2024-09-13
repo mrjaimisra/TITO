@@ -1,4 +1,2 @@
-Updating 41764c2..358f121
-Fast-forward
  app/models/git_pull_parser.rb | 12 ++++--------
  1 file changed, 4 insertions(+), 8 deletions(-)

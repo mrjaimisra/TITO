@@ -7,19 +7,21 @@ class GitPullFileWriter
   end
 
   def pull
-    output = ""
+    git_diff_stat_output = ""
 
     Dir.chdir(path_to_project) do
       @pull_directory = Dir.pwd
-      output = `git pull`
+      old_commit_SHA = `git rev-parse HEAD`
+      git_pull_output = `git pull`
+      return if git_pull_output.downcase.include?("Already up to date.".downcase)
+
+      git_diff_stat_output = `git diff --stat=1000,1000 #{old_commit_SHA}`
     end
 
-    write_to_file(output)
+    write_to_file(git_diff_stat_output)
   end
 
   def write_to_file(output)
-    return if output.downcase.include?("Already up to date.".downcase)
-
     file_name = "git_pulls/git_pull_output-#{Time.now.to_i}.txt"
     output_file = file_class.new(file_name, "w+")
 

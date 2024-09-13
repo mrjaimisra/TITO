@@ -24,7 +24,10 @@ parser = GitPullParser.new
 parser.parse_from_file(file.path)
 file.close
 
+exit if !parser.files_changed?
+
 puts "\n\nCreating #{parser.changed_files.length} records in the database...\n\n"
+
 if parser.save_changed_files!
   puts "Records created successfully."
 else

@@ -7,7 +7,9 @@ RSpec.describe GitPullFileWriter do
     git_pull_file_writer = GitPullFileWriter.new(file_class: StringIO)
     git_pull_example_output = File.read("spec/fixtures/git_pulls/git_pull-output-1725121785.txt")
     allow(git_pull_file_writer).to receive(:`).and_call_original
-    allow(git_pull_file_writer).to receive(:`).with("git pull").and_return(git_pull_example_output)
+    allow(git_pull_file_writer).to receive(:`).with("git rev-parse HEAD").and_return("")
+    allow(git_pull_file_writer).to receive(:`).with("git pull").and_return("")
+    allow(git_pull_file_writer).to receive(:`).with("git diff --stat=1000,1000 ").and_return(git_pull_example_output)
 
     file = git_pull_file_writer.pull
 
@@ -17,7 +19,9 @@ RSpec.describe GitPullFileWriter do
   it "generates the correct file name" do
     git_pull_file_writer = GitPullFileWriter.new
     allow(git_pull_file_writer).to receive(:`).and_call_original
+    allow(git_pull_file_writer).to receive(:`).with("git rev-parse HEAD").and_return("")
     allow(git_pull_file_writer).to receive(:`).with("git pull").and_return("")
+    allow(git_pull_file_writer).to receive(:`).with("git diff --stat=1000,1000 ").and_return("")
     current_time = Time.new("2024-08-31 12:05:00.00 -0600")
     allow(Time).to receive(:now).and_return(current_time)
 
@@ -34,7 +38,9 @@ RSpec.describe GitPullFileWriter do
       path_to_project: "./spec",
     )
     allow(git_pull_file_writer).to receive(:`).and_call_original
+    allow(git_pull_file_writer).to receive(:`).with("git rev-parse HEAD").and_return("")
     allow(git_pull_file_writer).to receive(:`).with("git pull").and_return("")
+    allow(git_pull_file_writer).to receive(:`).with("git diff --stat=1000,1000 ").and_return("")
 
     git_pull_file_writer.pull
 

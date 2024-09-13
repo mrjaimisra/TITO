@@ -1,5 +1,3 @@
-Updating 41764c2..358f121
-Fast-forward
  app/models/git_pull_parser.rb | 12 ++++--------
  app/models/git_pull_file_writer.rb | 1 +
  spec/fixtures/file_to_be_deleted_2.rb | 5 -----
