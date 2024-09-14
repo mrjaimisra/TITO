@@ -152,4 +152,15 @@ RSpec.describe GitPullParser do
     expect(first_changed_file.created_at).to eq(now)
     expect(first_changed_file.updated_at).to eq(now)
   end
+
+  it "does not attempt to parse total line length for a deleted file" do
+    git_pull_parser = GitPullParser.new
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-deleted-file.txt"
+
+    git_pull_parser.parse_from_file(output_file_path)
+    git_pull_parser.save_changed_files!
+
+    first_changed_file = ChangedFile.first
+    expect(first_changed_file.total_line_length).to be_nil
+  end
 end

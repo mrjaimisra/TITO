@@ -67,8 +67,10 @@ class GitPullParser
   def deletions(line) = line[1].to_i
 
   def total_line_length_for_file(file_path)
-    total_lines = File.readlines(file_path)
-    total_lines.length
+    if File.exist?(file_path)
+      total_lines = File.readlines(file_path)
+      total_lines.length
+    end
   end
 
   def get_total_flog_score(flog_lines)
