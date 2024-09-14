@@ -1,4 +1,5 @@
 require 'sidekiq'
+require 'sidekiq-scheduler'
 
 Sidekiq.configure_client do |config|
   config.redis = { db: 1 }
@@ -9,9 +10,9 @@ Sidekiq.configure_server do |config|
 end
 
 class GitPullWorker
-  include Sidekiq::Worker
+  include Sidekiq::Job
 
   def perform
-    
+
   end
 end

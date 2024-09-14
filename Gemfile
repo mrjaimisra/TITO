@@ -18,3 +18,4 @@ end
 
 gem "sidekiq", "~> 7.3"
 gem 'redis', '~> 5.2'
+gem 'sidekiq-scheduler', '~> 5.0', '>= 5.0.6'

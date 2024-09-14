@@ -1,0 +1,5 @@
+:scheduler:
+  :schedule:
+    git_pull_worker:
+      cron: '0 8 * * * *'   # Runs once per minute
+      class: GitPullWorker
