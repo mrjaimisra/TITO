@@ -1,2 +1,1 @@
- spec/fixtures/for_counting_total_line_length.rb | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+4	8	spec/fixtures/for_counting_total_line_length.rb

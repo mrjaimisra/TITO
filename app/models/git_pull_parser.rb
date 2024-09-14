@@ -23,9 +23,7 @@ class GitPullParser
   private
 
   def parse(output)
-    @additions = 0
-    @deletions = 0
-    lines = lines_representing_changed_files(output)
+    lines = raw_data_from_each_line(output)
 
     @changed_files = lines.map do |line|
       data_for_each_changed_file(line)
@@ -35,8 +33,9 @@ class GitPullParser
   end
 
   def data_for_each_changed_file(line)
-    parse_additions_and_deletions(line)
-    number_of_changes = number_of_line_changes_in_output(line)
+    additions = additions(line)
+    deletions = deletions(line)
+    number_of_changes = additions + deletions
     file_path = file_path_for_changed_file(line)
     total_line_length = total_line_length_for_file(file_path)
     flog_lines = run_flog_and_parse_output(file_path)
@@ -59,24 +58,13 @@ class GitPullParser
     )
   end
 
-  def lines_representing_changed_files(output)
-    output.split(/\n/).filter_map { |line| line if line.include?("|") }
+  def raw_data_from_each_line(output)
+    output.split(/\n/).map { |line| line.split("\t") }
   end
 
-  def parse_additions_and_deletions(line)
-    line.split("|").last.split(" ").last.chars.each do |plus_or_minus|
-      case plus_or_minus
-      when "+"
-        @additions += 1
-      when "-"
-        @deletions += 1
-      end
-    end
-  end
+  def additions(line) = line[0].to_i
 
-  def number_of_line_changes_in_output(line)
-    line.split("|").last.split(" ").first.to_i
-  end
+  def deletions(line) = line[1].to_i
 
   def total_line_length_for_file(file_path)
     total_lines = File.readlines(file_path)
@@ -99,9 +87,7 @@ class GitPullParser
     get_flog_value_from_line(flog_average_line)
   end
 
-  def file_path_for_changed_file(line)
-    line.split("|").first.strip
-  end
+  def file_path_for_changed_file(line) = line[-1]
 
   def run_flog_and_parse_output(file_path)
     file_extension = File.extname(file_path)

@@ -1,5 +1,1 @@
-Updating 2bc6265..b84d711
-Fast-forward
- spec/fixtures/file_to_be_deleted_2.rb | 2 --
- 1 file changed, 2 deletions(-)
- delete mode 100644 file_to_be_deleted_2.rb
+0	2	spec/fixtures/file_to_be_deleted_2.rb

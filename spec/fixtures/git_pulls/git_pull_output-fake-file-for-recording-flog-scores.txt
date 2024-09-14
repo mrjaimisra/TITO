@@ -1,2 +1,1 @@
- spec/fixtures/for_recording_flog_scores.rb | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+4	8	spec/fixtures/for_recording_flog_scores.rb

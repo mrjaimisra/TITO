@@ -1,0 +1,9 @@
+ Gemfile                                            |  1 +
+ Gemfile.lock                                       | 11 ++++
+ app/models/git_pull_parser.rb                      | 47 +++++++++-----
+ .../20240909064442_create_changed_files_table.rb   |  1 +
+ db/schema.rb                                       |  2 +
+ lib/run.rb                                         | 16 +++--
+ .../git_pull_output-invalid-timestamp.txt          |  5 ++
+ spec/models/git_pull_parser_spec.rb                | 71 +++++++++++++++-------
+ 8 files changed, 110 insertions(+), 44 deletions(-)

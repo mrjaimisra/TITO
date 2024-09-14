@@ -15,7 +15,7 @@ class GitPullFileWriter
       git_pull_output = `git pull`
       return if git_pull_output.downcase.include?("Already up to date.".downcase)
 
-      git_diff_stat_output = `git diff --stat=1000,1000 #{old_commit_SHA}`
+      git_diff_stat_output = `git diff --numstat #{old_commit_SHA}`
     end
 
     write_to_file(git_diff_stat_output)

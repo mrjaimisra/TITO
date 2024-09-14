@@ -1,2 +1,1 @@
- app/models/git_pull_parser.rb | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+4	8	app/models/git_pull_parser.rb

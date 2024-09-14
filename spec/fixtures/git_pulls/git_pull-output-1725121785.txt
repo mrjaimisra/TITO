@@ -1,8 +1,7 @@
- .bundle/config      |  2 ++
- Gemfile             |  8 ++++++
- Gemfile.lock        | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- Rakefile            |  8 ++++++
- config.ru           |  6 +++++
- config/database.yml | 18 +++++++++++++
- tito.rb             |  5 ++++
- 7 files changed, 124 insertions(+)
+2	0	.bundle/config
+8	0	Gemfile
+77	0	Gemfile.lock
+8	0	Rakefile
+6	0	config.ru
+18	0	config/database.yml
+5	0	tito.rb

@@ -1,2 +1,1 @@
- spec/fixtures/file_to_be_deleted_2.rb | 5 -----
- 1 file changed, 5 deletions(-)
+0	5	spec/fixtures/file_to_be_deleted_2.rb

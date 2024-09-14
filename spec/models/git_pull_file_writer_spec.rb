@@ -9,7 +9,7 @@ RSpec.describe GitPullFileWriter do
     allow(git_pull_file_writer).to receive(:`).and_call_original
     allow(git_pull_file_writer).to receive(:`).with("git rev-parse HEAD").and_return("")
     allow(git_pull_file_writer).to receive(:`).with("git pull").and_return("")
-    allow(git_pull_file_writer).to receive(:`).with("git diff --stat=1000,1000 ").and_return(git_pull_example_output)
+    allow(git_pull_file_writer).to receive(:`).with("git diff --numstat ").and_return(git_pull_example_output)
 
     file = git_pull_file_writer.pull
 
