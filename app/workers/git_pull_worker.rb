@@ -12,7 +12,7 @@ end
 class GitPullWorker
   include Sidekiq::Job
 
-  def perform
-
+  def perform(path_to_project = "", passed_in_file_path = "")
+    puts `ruby lib/run.rb #{path_to_project} #{passed_in_file_path}`
   end
 end

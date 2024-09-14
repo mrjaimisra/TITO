@@ -18,7 +18,7 @@ else
   end
 end
 output = file.read
-puts "GitPullFileWriter output: #{output}"
+puts "GitPullFileWriter output:\n\n#{output}"
 
 parser = GitPullParser.new
 parser.parse_from_file(file.path)
@@ -26,10 +26,10 @@ file.close
 
 exit if !parser.files_changed?
 
-puts "\n\nCreating #{parser.changed_files.length} records in the database...\n\n"
+puts "\nCreating #{parser.changed_files.length} records in the database...\n\n"
 
 if parser.save_changed_files!
-  puts "Records created successfully."
+  puts "\nRecords created successfully.\n\n"
 else
-  puts "There was an error saving the records: #{parser.errors.full_messages.join(", ")}."
+  puts "\nThere was an error saving the records: #{parser.errors.full_messages.join(", ")}.\n\n"
 end
