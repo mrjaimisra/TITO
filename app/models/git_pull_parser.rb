@@ -94,6 +94,7 @@ class GitPullParser
   def run_flog_and_parse_output(file_path)
     file_extension = File.extname(file_path)
 
+    return unless File.exist?(file_path)
     return unless file_extension == ".rb"
 
     flog_output = `flog #{file_path}`

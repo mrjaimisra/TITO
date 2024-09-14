@@ -163,4 +163,15 @@ RSpec.describe GitPullParser do
     first_changed_file = ChangedFile.first
     expect(first_changed_file.total_line_length).to be_nil
   end
+
+  it "doesn't attempt to parse total flog score for a file that doesn't exist" do
+    git_pull_parser = GitPullParser.new
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-deleted-file.txt"
+
+    git_pull_parser.parse_from_file(output_file_path)
+    git_pull_parser.save_changed_files!
+
+    first_changed_file = ChangedFile.first
+    expect(first_changed_file.total_flog_score).to be_nil
+  end
 end

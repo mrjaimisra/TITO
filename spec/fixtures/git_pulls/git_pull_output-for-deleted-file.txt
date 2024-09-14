@@ -1,1 +1,1 @@
-0	1	file_that_no_longer_exists.rb -
+0	1	file_that_no_longer_exists.rb
