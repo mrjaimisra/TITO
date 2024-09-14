@@ -1,0 +1,13 @@
+7	5	app/models/git_pull_file_writer.rb
+9	23	app/models/git_pull_parser.rb
+3	0	lib/run.rb
+7	17	spec/fixtures/git_pulls/git_pull-output-1725121785.txt
+1	5	spec/fixtures/git_pulls/git_pull_output-1725856246.txt
+1	4	spec/fixtures/git_pulls/git_pull_output-1725857145.txt
+3	6	spec/fixtures/git_pulls/git_pull_output-1725876701.txt
+1	4	spec/fixtures/git_pulls/git_pull_output-fake-file-for-counting-total-line-length.txt
+1	4	spec/fixtures/git_pulls/git_pull_output-fake-file-for-recording-flog-scores.txt
+9	0	spec/fixtures/git_pulls/git_pull_output-for-deleted-file.txt
+5	8	spec/fixtures/git_pulls/git_pull_output-for-saving-changed-file-records-to-database.txt
+1	5	spec/fixtures/git_pulls/git_pull_output-invalid-timestamp.txt
+7	1	spec/models/git_pull_file_writer_spec.rb
