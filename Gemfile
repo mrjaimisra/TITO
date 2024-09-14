@@ -13,4 +13,8 @@ gem 'flog', '~> 4.8'
 
 group :test do
   gem 'database_cleaner-active_record', '~> 2.2'
+  gem 'rspec-sidekiq', '~> 5.0'
 end
+
+gem "sidekiq", "~> 7.3"
+gem 'redis', '~> 5.2'
