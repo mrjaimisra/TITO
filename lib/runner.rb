@@ -13,6 +13,10 @@ class Runner
 
   def run
     @file = generate_output_file
+
+    return if file.blank?
+
+    @file = nil
     @output = file.read
 
     parse_output_and_save_changed_files unless output.blank?

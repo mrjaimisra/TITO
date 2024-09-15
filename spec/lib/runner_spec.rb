@@ -92,4 +92,14 @@ RSpec.describe Runner do
     expect(runner.output).to be_blank
     expect(runner.parser).to be_nil
   end
+
+  it "doesn't attempt to read output from a file if the file is blank" do
+    runner = Runner.new(path_to_project: ".")
+    allow(runner).to receive(:git_pull_and_write_to_file).and_return(nil)
+
+    runner.run
+
+    expect(runner.file).to be_nil
+    expect(runner.output).to be_nil
+  end
 end
