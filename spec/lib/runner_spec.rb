@@ -45,8 +45,8 @@ RSpec.describe Runner do
     tempfile.close
     expect(runner.file).to eq(tempfile)
     expect(runner.output).to eq(output)
-    expect(runner).to have_received(:puts).with("Pulling from git in directory: \".\"")
-    expect(runner).to have_received(:puts).with("Writing the output to a file...\n")
+    expect(runner).to have_received(:puts).with("\nPulling from git in directory: \".\"\n\n")
+    expect(runner).to have_received(:puts).with("\nWriting the output to a file...\n")
     expect(runner).to have_received(:puts).with("File path: #{tempfile.path}")
   end
 

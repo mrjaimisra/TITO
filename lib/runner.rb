@@ -34,14 +34,14 @@ class Runner
   end
 
   def set_output_from_git_pull
-    puts "Pulling from git in directory: \"#{path_to_project}\""
+    puts "\nPulling from git in directory: \"#{path_to_project}\"\n\n"
     new_file = git_pull_and_write_to_file
 
     if !new_file
       puts "Already up to date.\n\n"
       return
     end
-    puts "Writing the output to a file...\n"
+    puts "\nWriting the output to a file...\n"
     puts "File path: #{new_file.path}"
 
     new_file.rewind
