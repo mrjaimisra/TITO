@@ -45,7 +45,9 @@ RSpec.describe Runner do
     tempfile.close
     expect(runner.file).to eq(tempfile)
     expect(runner.output).to eq(output)
-    expect(runner).to have_received(:puts).with("Pulling from git and writing the output to a file...\n\n")
+    expect(runner).to have_received(:puts).with("Pulling from git in directory: \".\"")
+    expect(runner).to have_received(:puts).with("Writing the output to a file...\n")
+    expect(runner).to have_received(:puts).with("File path: #{tempfile.path}")
   end
 
   it "parses the output of a git pull when a file is passed in" do
@@ -77,5 +79,17 @@ RSpec.describe Runner do
     expect(runner.parser.files_changed?).to eq(true)
     expect(runner.parser.changed_files.length).to eq(6)
     expect(runner.parser.changed_files.first.file_path).to eq(".gitignore")
+  end
+
+  it "does not parse the output of a git pull when the output file is blank" do
+    path_to_project = "."
+
+    runner = Runner.new(path_to_project: path_to_project)
+    allow(runner).to receive(:puts).and_call_original
+    allow(runner).to receive(:git_pull_and_write_to_file).and_return(Tempfile.new)
+    runner.run
+
+    expect(runner.output).to be_blank
+    expect(runner.parser).to be_nil
   end
 end

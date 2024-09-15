@@ -12,37 +12,44 @@ class Runner
   end
 
   def run
+    @file = generate_output_file
+    @output = file.read
+
+    parse_output_and_save_changed_files unless output.blank?
+  end
+
+  private
+
+  def generate_output_file
     if path_to_file
       set_output_from_passed_in_file
     else
       set_output_from_git_pull
     end
-
-    parse_output_and_save_changed_files
   end
 
   def set_output_from_passed_in_file
     puts "Parsing the output of #{path_to_file}...\n\n"
-    @file = File.open(path_to_file)
-    @output = file.read
+    File.open(path_to_file)
+  end
+
+  def set_output_from_git_pull
+    puts "Pulling from git in directory: \"#{path_to_project}\""
+    new_file = git_pull_and_write_to_file
+
+    if !new_file
+      puts "Already up to date.\n\n"
+      return
+    end
+    puts "Writing the output to a file...\n"
+    puts "File path: #{new_file.path}"
+
+    new_file.rewind
+    new_file
   end
 
   def git_pull_and_write_to_file
     GitPullFileWriter.new(path_to_project:).pull
-  end
-
-  def set_output_from_git_pull
-    puts "Pulling from git and writing the output to a file...\n\n"
-    @file = git_pull_and_write_to_file
-
-    if !file
-      puts "Already up to date.\n\n"
-      exit
-    end
-    puts "File path: #{file.path}"
-
-    file.rewind
-    @output = file.read
   end
 
   def parse_output_and_save_changed_files
@@ -52,7 +59,7 @@ class Runner
     parser.parse_from_file(file.path)
     file.close
 
-    exit if !parser.files_changed?
+    return if !parser.files_changed?
 
     puts "\nCreating #{parser.changed_files.length} records in the database...\n\n"
 
