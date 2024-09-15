@@ -6,13 +6,13 @@ require "sinatra/activerecord"
 class Runner
   attr_reader :path_to_file, :path_to_project, :output, :file, :parser
 
-  def initialize(path_to_file: "", path_to_project: "")
+  def initialize(path_to_file: nil, path_to_project: ".")
     @path_to_file = path_to_file
     @path_to_project = path_to_project
   end
 
   def run
-    if path_to_file.present?
+    if path_to_file
       set_output_from_passed_in_file
     else
       set_output_from_git_pull
