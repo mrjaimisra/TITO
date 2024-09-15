@@ -16,7 +16,10 @@ class GitPullParser
 
   def save_changed_files!
     changed_files.each do |changed_file|
-      changed_file.save!
+      attributes = changed_file.attributes
+      attributes.delete("id")
+
+      ChangedFile.find_or_create_by(attributes)
     end
   end
 

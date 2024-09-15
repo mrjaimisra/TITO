@@ -185,4 +185,16 @@ RSpec.describe GitPullParser do
     first_changed_file = ChangedFile.first
     expect(first_changed_file.average_flog_score_per_method).to be_nil
   end
+
+  it "doesn't create duplicate records when the same output file is parsed multiple times" do
+    git_pull_parser = GitPullParser.new
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-1726356709.txt"
+
+    git_pull_parser.parse_from_file(output_file_path)
+    git_pull_parser.save_changed_files!
+    git_pull_parser.parse_from_file(output_file_path)
+    git_pull_parser.save_changed_files!
+
+    expect(ChangedFile.count).to eq(6)
+  end
 end
