@@ -1,4 +1,0 @@
-5	2	app/models/git_pull_parser.rb
-2	0	git_pulls/git_pull_output-1726292066.txt
-1	9	spec/fixtures/git_pulls/git_pull_output-for-deleted-file.txt
-33	0	spec/models/git_pull_parser_spec.rb

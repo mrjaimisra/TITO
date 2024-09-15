@@ -1,2 +1,0 @@
-1	0	git_pulls/git_pull_output-1726361663.txt
-1	0	git_pulls/git_pull_output-1726364615.txt

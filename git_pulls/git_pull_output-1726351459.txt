@@ -1,6 +1,0 @@
-4	0	Gemfile
-18	0	Gemfile.lock
-17	0	app/workers/git_pull_worker.rb
-4	0	git_pulls/git_pull_output-1726299526.txt
-13	0	spec/spec_helper.rb
-8	0	spec/workers/git_pull_worker_spec.rb

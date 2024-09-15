@@ -1,2 +1,0 @@
-13	0	git_pulls/git_pull_output-1726291865.txt
-1	1	lib/run.rb

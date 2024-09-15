@@ -1,2 +1,11 @@
+# ignore redis database dump file
+
 dump.rdb
+
+# ignore local environment variables
+
 .env
+
+# ignore local git pull files
+
+git_pulls

@@ -1,4 +1,0 @@
-4	1	app/models/git_pull_parser.rb
-3	0	git_pulls/git_pull_output-1726358702.txt
-6	0	spec/fixtures/git_pulls/git_pull_output-1726356709.txt
-12	0	spec/models/git_pull_parser_spec.rb
