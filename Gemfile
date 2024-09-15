@@ -10,12 +10,13 @@ gem 'rack-test', '~> 2.1'
 gem 'rspec', '~> 3.13'
 gem 'pry', '~> 0.14.2'
 gem 'flog', '~> 4.8'
+gem "sidekiq", "~> 7.3"
+gem 'redis', '~> 5.2'
+gem 'sidekiq-scheduler', '~> 5.0', '>= 5.0.6'
 
 group :test do
   gem 'database_cleaner-active_record', '~> 2.2'
   gem 'rspec-sidekiq', '~> 5.0'
 end
 
-gem "sidekiq", "~> 7.3"
-gem 'redis', '~> 5.2'
-gem 'sidekiq-scheduler', '~> 5.0', '>= 5.0.6'
+gem 'dotenv', '~> 3.1', '>= 3.1.2', groups: [:development, :test]
