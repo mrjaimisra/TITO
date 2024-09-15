@@ -9,16 +9,20 @@ passed_in_file_path = ARGV[1]
 if passed_in_file_path
   puts "Parsing the output of #{passed_in_file_path}...\n\n"
   file = File.open(passed_in_file_path)
+  output = file.read
 else
   puts "Pulling from git and writing the output to a file...\n\n"
   file = GitPullFileWriter.new(path_to_project: ARGV[0]).pull
   if !file
-    puts "Already up to date."
+    puts "Already up to date.\n\n"
     exit
   end
+  puts "File path: #{file.path}"
+  file.rewind
 end
+
 output = file.read
-puts "GitPullFileWriter output:\n\n#{output}"
+puts "\nGitPullFileWriter output:\n\n#{output}"
 
 parser = GitPullParser.new
 parser.parse_from_file(file.path)
