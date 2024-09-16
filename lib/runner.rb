@@ -21,6 +21,10 @@ class Runner
     parse_output_and_save_changed_files unless output.blank?
   end
 
+  def parser
+    @parser ||= GitPullParser.new
+  end
+
   private
 
   def generate_output_file
@@ -58,7 +62,6 @@ class Runner
   def parse_output_and_save_changed_files
     puts "\nGitPullFileWriter output:\n\n#{output}"
 
-    @parser = GitPullParser.new
     parser.parse_from_file(file.path)
     file.close
 
@@ -72,4 +75,5 @@ class Runner
       puts "\nThere was an error saving the records: #{parser.errors.full_messages.join(", ")}.\n\n"
     end
   end
+
 end

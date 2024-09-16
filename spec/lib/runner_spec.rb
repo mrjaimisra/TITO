@@ -90,7 +90,6 @@ RSpec.describe Runner do
     runner.run
 
     expect(runner.output).to be_blank
-    expect(runner.parser).to be_nil
   end
 
   it "doesn't attempt to read output from a file if the file is blank" do
