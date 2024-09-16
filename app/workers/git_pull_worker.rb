@@ -13,6 +13,7 @@ end
 
 class GitPullWorker
   include Sidekiq::Job
+  sidekiq_options retry: false # job will be discarded if it fails
 
   def perform(path_to_project = ENV["PATH_TO_PROJECT"], path_to_file = nil)
     runner = Runner.new(path_to_project:, path_to_file:)
