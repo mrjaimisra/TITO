@@ -199,46 +199,38 @@ RSpec.describe GitPullParser do
   end
 
   it "prepends the project directory path to the file path when reading the total line length for that file" do
-    path_to_project = "my/project/directory/"
-    output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
-    first_changed_file_path = "app/models/git_pull_parser.rb"
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-testing-total-line-length-with-relative-project-path.txt"
+    path_to_project = "spec/fixtures/"
+    first_changed_file_path = "git_pulls/git_pull_output-for-testing-total-line-length-with-relative-project-path.txt"
     file_path_in_project_directory = "#{path_to_project}#{first_changed_file_path}"
 
     git_pull_parser = GitPullParser.new
     allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
-    allow(File).to receive(:exist?).and_return(true)
-    allow(File).to receive(:readlines).with(file_path_in_project_directory).and_return(["line 1", "line 2", "line 3"])
     git_pull_parser.parse_from_file(output_file_path)
 
-    expect(File).to have_received(:exist?).twice.with(file_path_in_project_directory)
-    expect(git_pull_parser.changed_files.first.total_line_length).to eq(3)
+    expect(git_pull_parser.changed_files.first.total_line_length).to eq(1)
   end
 
   it "prepends the project directory path to the file path when running flog on that file" do
-    output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
-    path_to_project = "my/project/directory/"
-    first_changed_file_path = "app/models/git_pull_parser.rb"
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-testing-flog-scores-with-relative-project-path.txt"
+    path_to_project = "spec/fixtures/"
+    first_changed_file_path = "for_recording_flog_scores.rb"
     file_path_in_project_directory = "#{path_to_project}#{first_changed_file_path}"
-    flog_output = "2.2: flog total\n1.1: flog/method average\n\n1.1: main#none\n1.1: get#/../tito_clone/TITO/tito.rb:3-4\n"
 
     git_pull_parser = GitPullParser.new
     allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
-    allow(File).to receive(:exist?).and_return(true)
-    allow(File).to receive(:readlines).with(file_path_in_project_directory).and_return([])
-    allow(git_pull_parser).to receive(:`).with("flog #{file_path_in_project_directory}").and_return(flog_output)
     git_pull_parser.parse_from_file(output_file_path)
 
-    expect(File).to have_received(:exist?).twice.with(file_path_in_project_directory)
-    expect(git_pull_parser.changed_files.first.total_flog_score).to eq(2.2)
-    expect(git_pull_parser.changed_files.first.average_flog_score_per_method).to eq(1.1)
+    expect(git_pull_parser.changed_files.first.total_flog_score).to eq(21.7)
+    expect(git_pull_parser.changed_files.first.average_flog_score_per_method).to eq(4.3)
   end
 
   describe "#file_path_in_project_directory" do
     it "joins a project path with file path on a '/' character" do
-      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
-      path_to_project = "my/project/directory"
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-testing-relative-project-path.txt"
+      path_to_project = "spec/fixtures"
       first_changed_file_path = "app/models/git_pull_parser.rb"
-      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "spec/fixtures/app/models/git_pull_parser.rb"
 
       git_pull_parser = GitPullParser.new
       allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
@@ -248,10 +240,10 @@ RSpec.describe GitPullParser do
     end
 
     it "does not add an extra '/' character if the project path already ends with one" do
-      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
-      path_to_project = "my/project/directory/"
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-testing-relative-project-path.txt"
+      path_to_project = "spec/fixtures/"
       first_changed_file_path = "app/models/git_pull_parser.rb"
-      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "spec/fixtures/app/models/git_pull_parser.rb"
 
       git_pull_parser = GitPullParser.new
       allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
@@ -261,10 +253,10 @@ RSpec.describe GitPullParser do
     end
 
     it "does not add an extra '/' character if the file path already starts with one" do
-      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
-      path_to_project = "my/project/directory"
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-testing-relative-project-path.txt"
+      path_to_project = "spec/fixtures"
       first_changed_file_path = "/app/models/git_pull_parser.rb"
-      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "spec/fixtures/app/models/git_pull_parser.rb"
 
       git_pull_parser = GitPullParser.new
       allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
@@ -274,10 +266,10 @@ RSpec.describe GitPullParser do
     end
 
     it "does not add an extra '/' character if the project path already ends with one and the file path already starts with one" do
-      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
-      path_to_project = "my/project/directory/"
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-for-testing-relative-project-path.txt"
+      path_to_project = "spec/fixtures/"
       first_changed_file_path = "/app/models/git_pull_parser.rb"
-      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "spec/fixtures/app/models/git_pull_parser.rb"
 
       git_pull_parser = GitPullParser.new
       allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
