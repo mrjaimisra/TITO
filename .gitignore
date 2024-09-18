@@ -9,3 +9,7 @@ dump.rdb
 # ignore local git pull files
 
 git_pulls
+
+# ignore the nohup output file
+
+nohup.out
