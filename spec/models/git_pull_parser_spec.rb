@@ -215,8 +215,8 @@ RSpec.describe GitPullParser do
   end
 
   it "prepends the project directory path to the file path when running flog on that file" do
-    path_to_project = "my/project/directory/"
     output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+    path_to_project = "my/project/directory/"
     first_changed_file_path = "app/models/git_pull_parser.rb"
     file_path_in_project_directory = "#{path_to_project}#{first_changed_file_path}"
     flog_output = "2.2: flog total\n1.1: flog/method average\n\n1.1: main#none\n1.1: get#/../tito_clone/TITO/tito.rb:3-4\n"
@@ -231,5 +231,59 @@ RSpec.describe GitPullParser do
     expect(File).to have_received(:exist?).twice.with(file_path_in_project_directory)
     expect(git_pull_parser.changed_files.first.total_flog_score).to eq(2.2)
     expect(git_pull_parser.changed_files.first.average_flog_score_per_method).to eq(1.1)
+  end
+
+  describe "#file_path_in_project_directory" do
+    it "joins a project path with file path on a '/' character" do
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+      path_to_project = "my/project/directory"
+      first_changed_file_path = "app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+
+      git_pull_parser = GitPullParser.new
+      allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
+      relative_file_path = git_pull_parser.file_path_in_project_directory(first_changed_file_path)
+
+      expect(relative_file_path).to eq(file_path_in_project_directory)
+    end
+
+    it "does not add an extra '/' character if the project path already ends with one" do
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+      path_to_project = "my/project/directory/"
+      first_changed_file_path = "app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+
+      git_pull_parser = GitPullParser.new
+      allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
+      relative_file_path = git_pull_parser.file_path_in_project_directory(first_changed_file_path)
+
+      expect(relative_file_path).to eq(file_path_in_project_directory)
+    end
+
+    it "does not add an extra '/' character if the file path already starts with one" do
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+      path_to_project = "my/project/directory"
+      first_changed_file_path = "/app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+
+      git_pull_parser = GitPullParser.new
+      allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
+      relative_file_path = git_pull_parser.file_path_in_project_directory(first_changed_file_path)
+
+      expect(relative_file_path).to eq(file_path_in_project_directory)
+    end
+
+    it "does not add an extra '/' character if the project path already ends with one and the file path already starts with one" do
+      output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+      path_to_project = "my/project/directory/"
+      first_changed_file_path = "/app/models/git_pull_parser.rb"
+      file_path_in_project_directory = "my/project/directory/app/models/git_pull_parser.rb"
+
+      git_pull_parser = GitPullParser.new
+      allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
+      relative_file_path = git_pull_parser.file_path_in_project_directory(first_changed_file_path)
+
+      expect(relative_file_path).to eq(file_path_in_project_directory)
+    end
   end
 end

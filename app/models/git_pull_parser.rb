@@ -24,6 +24,20 @@ class GitPullParser
     end
   end
 
+  def file_path_in_project_directory(file_path)
+    relative_path = path_to_project
+
+    if relative_path.end_with?("/")
+      relative_path = relative_path[0..-2]
+    end
+
+    if file_path.start_with?("/")
+      file_path = file_path[1..-1]
+    end
+
+    "#{relative_path}/#{file_path}"
+  end
+
   private
 
   def parse(output)
@@ -80,10 +94,6 @@ class GitPullParser
 
   def path_to_project
     ENV["PATH_TO_PROJECT"]
-  end
-
-  def file_path_in_project_directory(file_path)
-    "#{path_to_project}#{file_path}"
   end
 
   def total_flog_score(flog_output)
