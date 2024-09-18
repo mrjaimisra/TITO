@@ -1,4 +1,5 @@
 require './app/models/changed_file'
+require 'dotenv/load'
 
 class GitPullParser
   attr_reader :changed_files, :additions, :deletions, :output_file_path
@@ -40,10 +41,11 @@ class GitPullParser
     deletions = deletions(line)
     number_of_changes = additions + deletions
     file_path = file_path_for_changed_file(line)
-    total_line_length = total_line_length_for_file(file_path)
-    flog_lines = run_flog_and_parse_output(file_path)
-    total_flog_score = get_total_flog_score(flog_lines)
-    average_flog_score_per_method = run_flog_and_get_average_flog_score_per_method(flog_lines)
+    relative_file_path = file_path_in_project_directory(file_path)
+    total_line_length = total_line_length_for_file(relative_file_path)
+    flog_output = run_flog_and_parse_output(relative_file_path)
+    total_flog_score = total_flog_score(flog_output)
+    average_flog_score_per_method = average_flog_score_per_method(flog_output)
     file_name = File.basename(file_path)
     created_and_updated_at = parse_timestamp_from_output_file_path
 
@@ -69,38 +71,46 @@ class GitPullParser
 
   def deletions(line) = line[1].to_i
 
-  def total_line_length_for_file(file_path)
-    if File.exist?(file_path)
-      total_lines = File.readlines(file_path)
+  def total_line_length_for_file(relative_file_path)
+    if File.exist?(relative_file_path)
+      total_lines = File.readlines(relative_file_path)
       total_lines.length
     end
   end
 
-  def get_total_flog_score(flog_lines)
-    return if flog_lines.nil?
+  def path_to_project
+    ENV["PATH_TO_PROJECT"]
+  end
 
-    flog_total_line = flog_lines.select{|flog_line| flog_line.include?("flog total")}
+  def file_path_in_project_directory(file_path)
+    "#{path_to_project}#{file_path}"
+  end
+
+  def total_flog_score(flog_output)
+    return if flog_output.nil?
+
+    flog_total_line = flog_output.select{|flog_line| flog_line.include?("flog total")}
 
     get_flog_value_from_line(flog_total_line)
   end
 
-  def run_flog_and_get_average_flog_score_per_method(flog_lines)
-    return if flog_lines.nil?
+  def average_flog_score_per_method(flog_output)
+    return if flog_output.nil?
 
-    flog_average_line = flog_lines.select{|flog_line| flog_line.include?("flog/method average")}
+    flog_average_line = flog_output.select{|flog_line| flog_line.include?("flog/method average")}
 
     get_flog_value_from_line(flog_average_line)
   end
 
   def file_path_for_changed_file(line) = line[-1]
 
-  def run_flog_and_parse_output(file_path)
-    file_extension = File.extname(file_path)
+  def run_flog_and_parse_output(relative_file_path)
+    file_extension = File.extname(relative_file_path)
 
-    return unless File.exist?(file_path)
+    return unless File.exist?(relative_file_path)
     return unless file_extension == ".rb"
 
-    flog_output = `flog #{file_path}`
+    flog_output = `flog #{relative_file_path}`
 
     flog_output.split("\n").map{|flog_line| flog_line.strip}
   end

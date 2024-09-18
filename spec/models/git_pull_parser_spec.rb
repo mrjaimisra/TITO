@@ -197,4 +197,39 @@ RSpec.describe GitPullParser do
 
     expect(ChangedFile.count).to eq(6)
   end
+
+  it "prepends the project directory path to the file path when reading the total line length for that file" do
+    path_to_project = "my/project/directory/"
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+    first_changed_file_path = "app/models/git_pull_parser.rb"
+    file_path_in_project_directory = "#{path_to_project}#{first_changed_file_path}"
+
+    git_pull_parser = GitPullParser.new
+    allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
+    allow(File).to receive(:exist?).and_return(true)
+    allow(File).to receive(:readlines).with(file_path_in_project_directory).and_return(["line 1", "line 2", "line 3"])
+    git_pull_parser.parse_from_file(output_file_path)
+
+    expect(File).to have_received(:exist?).twice.with(file_path_in_project_directory)
+    expect(git_pull_parser.changed_files.first.total_line_length).to eq(3)
+  end
+
+  it "prepends the project directory path to the file path when running flog on that file" do
+    path_to_project = "my/project/directory/"
+    output_file_path = "spec/fixtures/git_pulls/git_pull_output-1725857145.txt"
+    first_changed_file_path = "app/models/git_pull_parser.rb"
+    file_path_in_project_directory = "#{path_to_project}#{first_changed_file_path}"
+    flog_output = "2.2: flog total\n1.1: flog/method average\n\n1.1: main#none\n1.1: get#/../tito_clone/TITO/tito.rb:3-4\n"
+
+    git_pull_parser = GitPullParser.new
+    allow(git_pull_parser).to receive(:path_to_project).and_return(path_to_project)
+    allow(File).to receive(:exist?).and_return(true)
+    allow(File).to receive(:readlines).with(file_path_in_project_directory).and_return([])
+    allow(git_pull_parser).to receive(:`).with("flog #{file_path_in_project_directory}").and_return(flog_output)
+    git_pull_parser.parse_from_file(output_file_path)
+
+    expect(File).to have_received(:exist?).twice.with(file_path_in_project_directory)
+    expect(git_pull_parser.changed_files.first.total_flog_score).to eq(2.2)
+    expect(git_pull_parser.changed_files.first.average_flog_score_per_method).to eq(1.1)
+  end
 end
